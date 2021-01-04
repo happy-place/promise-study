@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <script>
+
+        function testAsync() {
+            let promise = new Promise((resolve, reject) => {
+                setTimeout(()=>{
+                // @ts-ignore
+                    resolve('hello');
+                },1000)
+                console.log('state change');
+            });
+            promise.then(
+                value => {
+                    console.log('callback');
+                    console.log(`value: ${value}`)
+                },
+                reason => {
+                    console.log('callback');
+                    console.error(`reason: ${reason}`)
+                }
+            )
+        }
+
+        function testThen(){
+            // then 匹配具体回调函数，返回另一个promise对象，其状态与回调函数相关
+            // 抛出异常时为 rejected 状态
+            // 抛出非Promise对象时，为resolved状态
+            // 抛出Promise对象时，then-promise状态取决于此抛出Promise状态
+            let promise = new Promise((resolve,reject)=>{
+                // @ts-ignore
+                resolve('success');
+                // reject('fail')
+            });
+            let p = promise.then(
+                value => {
+                    // throw 'error'; // rejected
+                    // console.log(`value1: ${value}`); // fullfilled
+                    // return '123'; // fullfilled
+                    // Promise.resolve('123'); // fullfilled
+                    Promise.reject('123'); // rejected
+                },
+                reason => {
+                    console.error(`reason1:${reason}`)
+                }
+            )
+            console.log(p);
+        }
+
+        function testChain(){
+            //
+            let promise = new Promise((resolve,reject)=>{
+                // @ts-ignore
+                resolve('success1');
+                // reject('fail')
+            });
+            promise.then(
+                value => {
+                    console.log(`value1: ${value}`); // value1: success1
+                },
+                reason => {
+                    console.error(`reason1:${reason}`)
+                }
+            ).then(
+                value => {
+                    console.log(`value2: ${value}`); // value2: undefined (前面then返回的是一个undefined对象，被后边then捕获)
+                },
+                reason => {
+                    console.error(`reason2:${reason}`)
+                }
+            );
+        }
+
+        function testBreak(){
+            new Promise((resolve,reject)=>{
+                // @ts-ignore
+                resolve('success');
+            }).then(
+                value =>{
+                    console.log(`value1`)
+                    // return new Promise(()=>{})
+                }
+            ).then(
+                value =>{
+                    console.log(`value2`)
+                }
+            ).then(
+                value =>{
+                    console.log(`value3`)
+                }
+            )
+        }
+
+        // testAsync()
+        // testThen()
+        // testChain()
+        testBreak()
+
+    </script>
+
+
+</body>
+</html>
