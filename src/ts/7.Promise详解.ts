@@ -29,7 +29,7 @@ import {XMLHttpRequest} from "xmlhttprequest-ts";
  *
  * all()是Promise类的方法，用于对一组Promise对象进行处理全部成功是返回各promise结果数组，若其中有一个Promise对象失败，则只返回失败的这个Promise
  *
- * race()是Promise类的方法，用于对一组Promise对象进行处理，返回另一个Promise对象，结果是首个成功的Promise对象结果,相当于any效果
+ * race()是Promise类的方法，用于对一组Promise对象进行处理，返回另一个Promise对象，结果是谁先改变状态，就是谁
  *
  * 改变Promise 状态三种方式:
  *  resolve: 从 pending变为 resolved
@@ -56,6 +56,9 @@ import {XMLHttpRequest} from "xmlhttprequest-ts";
  *
  * 中断Promise链式调用：某个then中返回 pending状态Promise： new Promise(()=>{})
  *
+ * async 自身是一个函数，用来标记 另外一个函数，得到一个promise对象，返回值有被标记函数返回值决定
+ *
+ * await 只能出现在asynx 标记的函数中，当await 标记普通对象时，返回值就是此普通对象，当标记的是Promise对象时，返回的值是Promise对象成功结果，如果出现异常需要使用try-catch捕获
  */
 
 function testPromise() {
@@ -210,7 +213,7 @@ function testStateChange(){
     )
 }
 
-function testAsync(){
+function testAsyncJob(){
     let promise = new Promise<void>((resolve,reject) => {
         // setTimeout(()=>{
         // @ts-ignore
@@ -363,6 +366,33 @@ function testBreak(){
     )
 }
 
+function testAsync(){
+    async function test(){
+        return 1;
+    }
+
+    let p = test();
+    console.log(typeof p);
+    console.log(p);
+}
+
+function testAwait(){
+    async function test(){
+        let res1 = await 1;
+        console.log(res1);
+        try{
+            let res2 = await new Promise((resolve,reject)=>{
+                resolve('success');
+                reject('fail');
+                throw 'error';
+            });
+            console.log(res2);
+        }catch (e){
+            console.error(e);
+        }
+    }
+}
+
 
 // testPromise()
 // testCatch()
@@ -371,9 +401,11 @@ function testBreak(){
 // testAll()
 // testRace()
 // testStateChange()
-// testAsync()
+// testAsyncJob()
 // testThen()
 // testMultiCallback()
 // testChain()
 // testCatch2()
-testBreak()
+// testBreak()
+// testAsync()
+testAwait()

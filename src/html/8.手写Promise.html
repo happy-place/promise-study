@@ -6,40 +6,76 @@
 </head>
 <body>
 
-<script src="../js/Promise.js"></script>
+<script src="../js/promise_by_class.js"></script>
+<!--<script src="../js/promise_by_func.js"></script>-->
 
 <script>
-    let promise = new Promise((resolve,reject)=>{
-        // setTimeout(()=>{
-        //     reject('failed');
+    // let promise = new Promise((resolve,reject)=>{
+    //     // setTimeout(()=>{
+    //     // resolve('success');
+    //         reject('failed');
+    //         // throw 'error'
+    //     // },100);
+    // });
+    // // console.log(promise);
+    // let p = promise.then(
+    //
+    // ).then(
+    //
+    // ).then(
+    //
+    // ).catch(reason => {
+    //     console.error(reason);
+    //     return new Promise((resolve,reject)=>{
+    //         resolve('SUCCESS');
+    //         // reject('FAIL');
+    //         // throw 'ERROR';
+    //     });
+    // });
+
+    // let p1 = Promise.resolve('haha');
+
+    // let p1 = Promise.resolve(new Promise((resolve,reject)=>{
+    //     // resolve('success');
+    //     // reject('fail');
+    //     throw 'error';
+    // }));
+
+    // let p1 = Promise.reject(1);
+    // let p1 = Promise.reject(new Promise((resolve,reject)=>{
+    //     resolve(1);
+    // }));
+
+    // let pp1 = new Promise((resolve,reject)=>{
+    //     setTimeout(
+    //         ()=>{
+    //             console.log('over');
+    //             resolve(1)
+    //         }, 100)
+    // });
+    // let pp2 = Promise.resolve(2);
+    // let pp3 = Promise.resolve(3);
+    // // let p1 = Promise.all([pp1,pp2,pp3])
+    // let p1 = Promise.race([pp1,pp2,pp3])
+
+    let p = new Promise((resolve,reject)=>{
+        // setTimeout(()=> {
+            console.log(1);
             resolve('success');
-        //     throw 'error'
-        // },1000);
+            // reject('fail');
+            // throw 'error';
+        // },2000);
     });
-    // console.log(promise);
-    let p = promise.then(
-        value=>{
-            console.log(`value1`);
-            // throw 'error2'
-            return new Promise((resolve,reject)=>{
-                // resolve('success');
-                reject('failed');
-            });
-        },
-        reason => {
-            console.error(`reason1`);
-            return 'failed2'
-        }
-    );
+
+    p.then(value=>{
+       console.log(2);
+    },reason=>{
+        console.error('error');
+    });
+
+
+
     console.log(p);
-    // promise.then(
-    //     value=>{
-    //         console.log(`value2`);
-    //     },
-    //     reason => {
-    //         console.error(`reason2`);
-    //     }
-    // );
 </script>
 
 </body>
